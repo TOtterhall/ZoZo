@@ -3,11 +3,11 @@ const express = require("express");
 const router = express.Router();
 //här kan vi sllänga in det vi skrivit i controller
 const {
-  getAllUsers,
+  // getAllUsers,
   getSpecificUser,
 } = require("../controllers/user.controller");
 
-router.get("/", getAllUsers);
+// router.get("/", getAllUsers);
 
 router.get("/:id", getSpecificUser);
 

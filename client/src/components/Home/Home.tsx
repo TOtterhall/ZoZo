@@ -1,3 +1,5 @@
+import Navbar from "../Navbar/Navbar";
+
 export default function Home() {
   //cart som är hårdkodad här men som kommer att ligga i localhost
   //Kommer behöva skapa en cart som vi sedan mapar ut i server
@@ -12,28 +14,29 @@ export default function Home() {
   //     },
   //   ];
   //Vi ska använda cookies så vi får titta på vite.config filen...? För inloggningen.
-  async function handlePayment() {
-    const response = await fetch(
-      "http://localhost:3400/create-checkout-session",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(""),
-      }
-    );
-    if (!response.ok) {
-      return;
-    }
-    //Stripe har en function som heter redirect men behövs egentligen inte.
-    const { url } = await response.json();
-    window.location = url;
-  }
+  // async function handlePayment() {
+  //   const response = await fetch(
+  //     "http://localhost:3400/create-checkout-session",
+  //     {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(""),
+  //     }
+  //   );
+  //   if (!response.ok) {
+  //     return;
+  //   }
+  //   Stripe har en function som heter redirect men behövs egentligen inte.
+  //   const { url } = await response.json();
+  //   window.location = url;
+  // }
   return (
     //Vår homepage ska visa alla produkter
+    //+Navbar + Login
     <div>
-      <button onClick={handlePayment}>GÅ TILL KASSAN</button>
+      <Navbar></Navbar>
     </div>
   );
 }

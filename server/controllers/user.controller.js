@@ -1,8 +1,9 @@
 // Börja med att titta på hur den "/createcheckout skapades"
-
-async function getAllUsers(req, res) {
-  const users = await stripe.customer.find();
-  return res.status(200).json(users);
+const { initStripe } = require("../stripe");
+const Stripe = initStripe;
+async function getSpecificUser(req, res) {
+  const users = await Stripe.customer.find();
+  return res.status(200).json(`${req.params.id} at your service`);
 }
 
 // async function getAllUsers(req, res, next) {
@@ -15,7 +16,7 @@ async function getAllUsers(req, res) {
 // }
 
 //MÅSTE EXPORTRA DESSA mellan raderna är sådant vi skrivit i users.router.js
-module.exports = { getAllUsers, getSpecificUser };
+module.exports = { getSpecificUser };
 
 // var elements = stripe.elements({
 //   clientSecret: "CLIENT_SECRET",
