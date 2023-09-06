@@ -41,10 +41,13 @@ app.post("/login", async (req, res) => {
     );
 
     if (!user) {
+      const customer = await stripe.customers.create({
+        name: username,
+      });
       const newUser = {
         username,
         password,
-        stripeCustomerId: "",
+        stripeCustomerId: customer.id,
       };
 
       users.push(newUser);
