@@ -1,9 +1,52 @@
 // Börja med att titta på hur den "/createcheckout skapades"
 const { initStripe } = require("../stripe");
-const Stripe = initStripe;
+const fs = require("fs");
+//STÄDA
+//COOKIE-SESSION
+//ERROR
+//MIDDLEWARES
+//
+//LOGGA IN
+//LOGGA UT
+//REGISTERA
+
 async function getSpecificUser(req, res) {
-  const users = await Stripe.customer.find();
-  return res.status(200).json(`${req.params.id} at your service`);
+  const { username, password } = req.body;
+
+  try {
+    const stripe = initStripe();
+
+    const userData = fs.readFileSync("db/users.json", "utf-8");
+    let users = JSON.parse(userData);
+    console.log(userData);
+
+    if (!Array.isArray(users)) {
+      users = [];
+    }
+
+    const user = users.find(
+      (u) => u.username === username && u.password === password
+    );
+
+    if (!user) {
+      const customer = await stripe.customers.create({
+        name: username,
+      });
+      const newUser = {
+        username,
+        password,
+        stripeCustomerId: customer.id,
+      };
+
+      users.push(newUser);
+      console.log("User added:", newUser);
+      // NYA LISTAN
+      fs.writeFileSync("db/users.json", JSON.stringify(users));
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Något gick fel" });
+  }
 }
 
 // async function getAllUsers(req, res, next) {
@@ -17,76 +60,3 @@ async function getSpecificUser(req, res) {
 
 //MÅSTE EXPORTRA DESSA mellan raderna är sådant vi skrivit i users.router.js
 module.exports = { getSpecificUser };
-
-// var elements = stripe.elements({
-//   clientSecret: "CLIENT_SECRET",
-// });
-// HÄR SKA USER CONTROLLER
-// const { UserModel } = require("../user/user.model");
-// const bcrypt = require("bcrypt");
-
-// async function register(req, res) {
-//   // Check if the user exists
-
-//   const existingUser = await UserModel.findOne({ email: req.body.email });
-//   if (existingUser) {
-//     return res.status(409).json("Email already registred");
-//   }
-
-//   const user = new UserModel(req.body);
-//   user.password = await bcrypt.hash(user.password, 10);
-//   await user.save();
-
-//   const jsonUser = user.toJSON();
-//   jsonUser._id = user._id;
-//   delete jsonUser.password;
-
-//   res.status(201).send(jsonUser);
-// }
-
-// async function login(req, res) {
-//   // Check if username and password is correct
-//   const existingUser = await UserModel.findOne({
-//     email: req.body.email,
-//   }).select("+password");
-
-//   if (
-//     !existingUser ||
-//     !(await bcrypt.compare(req.body.password, existingUser.password))
-//   ) {
-//     return res.status(401).json("Wrong password or username");
-//   }
-
-//   const user = existingUser.toJSON();
-//   user._id = existingUser._id;
-//   delete user.password;
-
-//   // Check if user already is logged in
-//   if (req.session._id) {
-//     return res.status(200).json(user);
-//   }
-
-//   // Save info about the user to the session (an encrypted cookie stored on the client)
-//   req.session = user;
-//   res.status(200).json(user);
-// }
-
-// /**
-//  * Logout the user and remove the cookie and session
-//  */
-// async function logout(req, res) {
-//   if (!req.session._id) {
-//     return res.status(400).json("Cannot logout when you are not logged in");
-//   }
-//   req.session = null;
-//   res.status(204).json(null);
-// }
-
-// async function authorize(req, res) {
-//   if (!req.session._id) {
-//     return res.status(401).json("You are not logged in");
-//   }
-//   res.status(200).json(req.session);
-// }
-
-// module.exports = { register, login, logout, authorize };

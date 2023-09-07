@@ -7,7 +7,7 @@ export default function Loggin() {
   async function handleLogin() {
     const userData = { username, password };
     console.log("Users before update:", userData);
-    const response = await fetch("http://localhost:3400/login", {
+    const response = await fetch("http://localhost:3400/users/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
