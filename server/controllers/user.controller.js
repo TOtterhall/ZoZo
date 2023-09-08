@@ -1,17 +1,20 @@
 // Börja med att titta på hur den "/createcheckout skapades"
 const { initStripe } = require("../stripe");
 const fs = require("fs");
+const bcrypt = require("bcrypt");
+
 //STÄDA
 //COOKIE-SESSION
 //ERROR
-//MIDDLEWARES
+
 //
 //LOGGA IN
 //LOGGA UT
 //REGISTERA
 
-async function getSpecificUser(req, res) {
-  const { username, password } = req.body;
+async function register(req, res) {
+  const { username, password, email } = req.body;
+  const hashedPassword = await bcrypt.hash(password, 10);
 
   try {
     const stripe = initStripe();
@@ -34,7 +37,8 @@ async function getSpecificUser(req, res) {
       });
       const newUser = {
         username,
-        password,
+        password: hashedPassword,
+        email,
         stripeCustomerId: customer.id,
       };
 
@@ -42,6 +46,7 @@ async function getSpecificUser(req, res) {
       console.log("User added:", newUser);
       // NYA LISTAN
       fs.writeFileSync("db/users.json", JSON.stringify(users));
+      // res.status(200).json({ url: session.url });
     }
   } catch (error) {
     console.error(error);
@@ -59,4 +64,4 @@ async function getSpecificUser(req, res) {
 // }
 
 //MÅSTE EXPORTRA DESSA mellan raderna är sådant vi skrivit i users.router.js
-module.exports = { getSpecificUser };
+module.exports = { register };

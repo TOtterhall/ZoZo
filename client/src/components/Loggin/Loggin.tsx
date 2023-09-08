@@ -3,9 +3,10 @@ import { useState } from "react";
 export default function Loggin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
   //Vi ska använda cookies så vi får titta på vite.config filen...? För inloggningen.
   async function handleLogin() {
-    const userData = { username, password };
+    const userData = { username, password, email };
     console.log("Users before update:", userData);
     const response = await fetch("http://localhost:3400/users/login", {
       method: "POST",
@@ -32,6 +33,12 @@ export default function Loggin() {
           placeholder="Användarnamn"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="E-post"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
         <input
           type="text"
