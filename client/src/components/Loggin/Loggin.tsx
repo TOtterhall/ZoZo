@@ -8,22 +8,31 @@ export default function Loggin() {
   async function handleLogin() {
     const userData = { username, password, email };
     console.log("Users before update:", userData);
-    const response = await fetch("http://localhost:3400/users/login", {
+    const response = await fetch("http://localhost:3040/users/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(userData),
     });
+    console.log("Server response:", response);
     if (!response.ok) {
       console.log("Detta gick inte att logga in du");
       return;
     }
-    //Stripe har en function som heter redirect men behövs egentligen inte.
-    const { url } = await response.json();
-    window.location = url;
+    // Stripe har en function som heter redirect men behövs egentligen inte.
+    if (response.ok) {
+      const { url } = await response.json();
+      if (url) {
+        window.location = url;
+      } else {
+        console.error("Ingen giltig url");
+      }
+    } else {
+      console.log("Detta gick inte att logga in du");
+    }
   }
-
+  console.log(`Hej${username}`);
   return (
     //LOGGA OCH LOGGA IN + VARUKORG TILL HÖGER
     <div>
@@ -47,6 +56,11 @@ export default function Loggin() {
           onChange={(e) => setPassword(e.target.value)}
         />
         <button onClick={handleLogin}>LOGGA IN</button>
+        <p>
+          Hej
+          <br />
+          {username}
+        </p>
       </div>
     </div>
   );

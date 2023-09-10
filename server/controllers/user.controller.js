@@ -3,7 +3,6 @@ const { initStripe } = require("../stripe");
 const fs = require("fs");
 const bcrypt = require("bcrypt");
 
-//STÄDA
 //COOKIE-SESSION
 //ERROR
 
@@ -11,7 +10,10 @@ const bcrypt = require("bcrypt");
 //LOGGA IN
 //LOGGA UT
 //REGISTERA
-
+const CLIENT_URL = "http://localhost:5173";
+//Här vill jag att användaren ska hamna någonannanstans såklart. Enabrt för test.
+const userLoggedIn = `${CLIENT_URL}/confirmation`;
+//USER REGISTER
 async function register(req, res) {
   const { username, password, email } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -40,13 +42,15 @@ async function register(req, res) {
         password: hashedPassword,
         email,
         stripeCustomerId: customer.id,
+        url: `${CLIENT_URL}`,
       };
 
       users.push(newUser);
       console.log("User added:", newUser);
       // NYA LISTAN
       fs.writeFileSync("db/users.json", JSON.stringify(users));
-      // res.status(200).json({ url: session.url });
+      res.status(200).json({ url: userLoggedIn });
+      // res.status(200).json("YAAA DU LYCKADES REGISTREA DIG");
     }
   } catch (error) {
     console.error(error);
