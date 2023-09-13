@@ -6,15 +6,19 @@ const userRouter = express.Router();
 const {
   // getAllUsers,
   register,
+  login,
 } = require("../controllers/user.controller");
 
-// router.get("/", getAllUsers);
-userRouter.get("/api", (req, res) => {
-  res.send("Hello from UserROuter");
-  console.log("Hello from UserRouter");
-});
-userRouter.post("/users/login", register);
-
+// userRouter.get("/", getAllUsers);
+// userRouter.get("/api", (req, res) => {
+//   res.send("Hello from UserROuter");
+//   console.log("Hello from UserRouter");
+// });
+userRouter.post("/users/register", register);
+userRouter.post("/users/login", login);
+// userRouter.get("/:id", getSpecificUser);
+// FÖr att få med en kaka
+// const userId = req.session.userId;
 //Här måste man eportera här kan man exportera flera saker men här har vi endast exporterat vår router.
 // Man kan skriva module.exports={router} alltså vi exporterar vår router som ett objekt  MEN då måste man tänka på att även importra den på detta sättet.
 module.exports = userRouter;
