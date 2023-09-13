@@ -1,3 +1,6 @@
+//SE TILL ATT MAN HAMNAR PÅ /REGISTRERA SIDAN...OCH INTE SHOP
+
+import { useState } from "react";
 import { useUserContext } from "../../../context/usercontext";
 
 export default function Register() {
@@ -8,38 +11,54 @@ export default function Register() {
     setPassword,
     email,
     setEmail,
-    register, // Här får du tillgång till register-funktionen från context
+    register,
+    login,
   } = useUserContext();
 
-  const handleRegister = async () => {
-    // Använd funktionen register() från context för att registrera användaren
-    await register();
+  const [isRegistered, setIsRegistered] = useState(false);
 
-    // Resten av din kod för att hantera registrering
+  const handleRegister = async () => {
+    await register();
+    setIsRegistered(true);
+  };
+
+  const handleLogin = () => {
+    if (isRegistered) {
+      login();
+    } else {
+      //Vad VILL jag göra annars?
+      alert("Du måste registrera dig först.");
+    }
   };
 
   return (
     <div>
       <div>
-        <input
-          type="text"
-          placeholder="Användarnamn"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="E-post"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Lösenord"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button onClick={handleRegister}>REGISTRERA</button>
+        {isRegistered ? (
+          <button onClick={handleLogin}>LOGGA IN</button>
+        ) : (
+          <div>
+            <input
+              type="text"
+              placeholder="Användarnamn"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="E-post"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="Lösenord"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <button onClick={handleRegister}>REGISTRERA</button>
+          </div>
+        )}
         <p>
           Hej
           <br />
