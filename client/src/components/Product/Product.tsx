@@ -1,37 +1,41 @@
-import { useEffect, useState } from "react";
+import { IProduct, useProductContext } from "../../../context/productcontext";
 import { Button } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
+// import { useCart } from "../../../context/cartcontext";
 import "./Product.css";
-interface Product {
-  id: string;
-  name: string;
-  description: string;
-  //FÅR INTE UT PRISET, VARFÖR?
-  price: string;
-  images: string;
-}
+import { useEffect } from "react";
 
 export default function Products() {
-  const [products, setProducts] = useState<Product[]>([]);
+  const { products, getSpecificProduct, getAllProducts, prices, getPrices } =
+    useProductContext();
 
   useEffect(() => {
-    fetch("http://localhost:3040/products", {
-      method: "GET",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setProducts(data);
-      })
-      .catch((error) => {
-        console.error("Error fetching products:", error);
-      });
-  }, []);
-  const handleAddToCart = async () => {
-    // await addToCart();
-    console.log(`Din vara ligger nu i varukorgen`);
+    getAllProducts();
+    getPrices();
+  }, [getAllProducts, getPrices]);
+
+  const getProductPrice = (product: IProduct) => {
+    const productPrice = prices.find(
+      (price) => price.id === product.default_price
+    );
+
+    if (productPrice) {
+      // Extrahera unit_amount från prisobjektet
+      const unitAmount = productPrice.unit_amount;
+
+      return <div>Pris: {unitAmount / 100} SEK</div>; // Dela med 100 om unit_amount är i cent (exempelvis 28900 för 289 SEK)
+    } else {
+      return <div>Pris saknas</div>;
+    }
   };
+
+  const handleAddToCart = async (id: string) => {
+    await getSpecificProduct(id);
+    console.log(`Din vara med ${id} ligger nu i varukorgen`);
+  };
+
   return (
     <>
       <Container className="productList">
@@ -41,9 +45,14 @@ export default function Products() {
               <Card.Body key={product.id} className="productCard">
                 <Card.Img src={product.images} alt={product.images}></Card.Img>
                 <Card.Title>{product.name}</Card.Title>
-                <Card.Text>Pris: {product.price}</Card.Text>
-                <Card.Text>Pris: {product.description}</Card.Text>
-                <Button variant="primary" onClick={handleAddToCart}>
+
+                {getProductPrice(product)}
+                <Card.Text>{product.description}</Card.Text>
+
+                <Button
+                  variant="primary"
+                  onClick={() => handleAddToCart(product.id)}
+                >
                   {" "}
                   Köp nu
                 </Button>
@@ -55,23 +64,3 @@ export default function Products() {
     </>
   );
 }
-
-//   return (
-//     <Card className="productCard" >
-//       {products.map((product) => (
-//         <div key={product.id}>
-//           <img
-//             className="card-img-top"
-//             src={product.images}
-//             alt={product.images}
-//           />
-//           <h2>{product.name}</h2>
-//           <p>Beskrivning : {product.description} </p>
-//           <p>Pris: {product.price}</p>
-
-//           <button onClick={handleAddToCart}>Köp Nu</button>
-//         </div>
-//       ))}
-//     </Card>
-//   );
-// }

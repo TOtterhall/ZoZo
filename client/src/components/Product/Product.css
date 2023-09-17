@@ -1,18 +1,18 @@
 .productList {
-  background-color: rgb(74, 166, 176);
+  background-color: rgb(157, 188, 191);
 }
 .productCard {
-  background-color: rgb(139, 61, 61);
+  background-color: rgb(241, 241, 241);
   margin: 10px;
   width: 25%;
   box-sizing: border-box;
 }
 .cards {
-  background-color: blueviolet;
+  background-color: rgb(205, 152, 255);
   width: 80rem;
+
   flex-direction: row;
   display: flex;
   flex-direction: row;
-
   justify-content: space-between;
 }
