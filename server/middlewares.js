@@ -1,6 +1,7 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-
+const cookieSession = require("cookie-session");
 const initApp = () => {
   const app = express();
 
@@ -15,6 +16,17 @@ const initApp = () => {
     })
   );
 
+  //COOKIES
+  app.use(
+    cookieSession({
+      name: "session",
+      keys: [process.env.COOKIE_SESSION_KEY],
+      maxAge: 1000 * 60 * 60 * 24, // 24 Hours
+      sameSite: "strict",
+      httpOnly: true,
+      secure: false,
+    })
+  );
   // Här kan du lägga till ytterligare middleware eller konfiguration
 
   return app;
