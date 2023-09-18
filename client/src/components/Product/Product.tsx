@@ -6,11 +6,12 @@ import Container from "react-bootstrap/Container";
 // import { useCart } from "../../../context/cartcontext";
 import "./Product.css";
 import { useEffect } from "react";
+import { useCartContext } from "../../../context/cartcontext";
 
 export default function Products() {
   const { products, getSpecificProduct, getAllProducts, prices, getPrices } =
     useProductContext();
-
+  const { addToCart } = useCartContext();
   useEffect(() => {
     getAllProducts();
     getPrices();
@@ -22,18 +23,17 @@ export default function Products() {
     );
 
     if (productPrice) {
-      // Extrahera unit_amount från prisobjektet
       const unitAmount = productPrice.unit_amount;
 
-      return <div>Pris: {unitAmount / 100} SEK</div>; // Dela med 100 om unit_amount är i cent (exempelvis 28900 för 289 SEK)
+      return <div>Pris: {unitAmount / 100} SEK</div>;
     } else {
       return <div>Pris saknas</div>;
     }
   };
-
-  const handleAddToCart = async (id: string) => {
-    await getSpecificProduct(id);
-    console.log(`Din vara med ${id} ligger nu i varukorgen`);
+  const handleAddToCart = async (product: IProduct) => {
+    await getSpecificProduct(product.id);
+    console.log(`Din vara med ${product.id} ligger nu i varukorgen`);
+    addToCart(product);
   };
 
   return (
@@ -51,7 +51,7 @@ export default function Products() {
 
                 <Button
                   variant="primary"
-                  onClick={() => handleAddToCart(product.id)}
+                  onClick={() => handleAddToCart(product)}
                 >
                   {" "}
                   Köp nu
