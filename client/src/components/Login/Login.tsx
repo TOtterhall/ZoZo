@@ -1,32 +1,24 @@
-import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useUserContext } from "../../../context/usercontext";
 
 export default function Login() {
-  const { username, setUsername, password, setPassword, register, login } =
+  const { username, setUsername, password, setPassword, login, isLoggedIn } =
     useUserContext();
 
-  const [isRegistered, setIsRegistered] = useState(false);
-
-  const handleRegister = async () => {
-    await register();
-    setIsRegistered(true);
-  };
-
   const handleLogin = async () => {
-    if (isRegistered) {
-      await login();
+    if (username && password) {
+      login();
+      console.log("Du e inloggad din rakkare...");
     } else {
-      handleRegister();
-      setIsRegistered(false);
-      alert("Du måste registrera dig först.");
+      alert("Du måste registrera dig förs");
     }
   };
 
   return (
     <div>
       <div>
-        {isRegistered ? (
-          <button onClick={handleLogin}>LOGGA IN</button>
+        {isLoggedIn ? (
+          <Link to="/" className="loggInBtn"></Link>
         ) : (
           <div>
             <input
@@ -42,13 +34,12 @@ export default function Login() {
               onChange={(e) => setPassword(e.target.value)}
             />
             <button onClick={handleLogin}>LOGGA IN</button>
+
+            <Link to="/register" className="loggInBtn">
+              REGISTRERA
+            </Link>
           </div>
         )}
-        <p>
-          Hej
-          <br />
-          {username}
-        </p>
       </div>
     </div>
   );
