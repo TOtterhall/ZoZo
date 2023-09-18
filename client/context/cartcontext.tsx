@@ -10,15 +10,6 @@ export interface IProduct {
 }
 export interface ICartItem {
   id: string;
-
-  // price_data: {
-  //   currency: "sek";
-  //   product_data: {
-  //     name: string;
-  //     description: string;
-  //   };
-  //   unit_amount: number;
-  // };
   quantity: number;
   default_price: string;
 }
@@ -26,6 +17,7 @@ export interface ICartItem {
 interface ICartContext {
   cart: ICartItem[];
   setCart: React.Dispatch<React.SetStateAction<ICartItem[]>>;
+
   addToCart: (product: IProduct) => void;
   handleCart: (item: ICartItem) => void;
 }
@@ -59,7 +51,7 @@ const CartProvider = ({ children }: PropsWithChildren) => {
     } else {
       updatedCart.push({
         id: product.id,
-        quantity: product.quantity,
+        quantity: 1,
         default_price: product.default_price,
       });
     }
