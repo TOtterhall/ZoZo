@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useUserContext } from "../../../context/usercontext";
+import { Link } from "react-router-dom";
 
 export default function Register() {
   const {
@@ -12,30 +13,22 @@ export default function Register() {
     email,
     setEmail,
     register,
-    login,
   } = useUserContext();
 
   const [isRegistered, setIsRegistered] = useState(false);
 
   const handleRegister = async () => {
     await register();
+    console.log("Nu är du registrerad");
     setIsRegistered(true);
-  };
-
-  const handleLogin = () => {
-    if (isRegistered) {
-      login();
-    } else {
-      //Vad VILL jag göra annars?
-      alert("Du måste registrera dig först.");
-    }
+    // localStorage.setItem("isLoggedIn", "true");
   };
 
   return (
     <div>
       <div>
         {isRegistered ? (
-          <button onClick={handleLogin}>LOGGA IN</button>
+          <Link to="/login" className="regBtn"></Link>
         ) : (
           <div>
             <input
@@ -59,11 +52,6 @@ export default function Register() {
             <button onClick={handleRegister}>REGISTRERA</button>
           </div>
         )}
-        <p>
-          Hej
-          <br />
-          {username}
-        </p>
       </div>
     </div>
   );
