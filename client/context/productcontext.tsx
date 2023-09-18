@@ -6,6 +6,8 @@ export interface IProduct {
   description: string;
   default_price: string;
   images: string;
+  unit_amount: number;
+  quantity: number;
 }
 
 export interface IPrice {
@@ -52,9 +54,6 @@ const ProductProvider = ({ children }: PropsWithChildren) => {
       });
       console.log("Server response:", response);
       if (!response.ok) {
-        // console.log(`Failed to fetch product with ID ${id}`);
-        // VILL JAG THROW NEW ERROR FÖR ATT HA MER FELAHNTERING HÄR???
-        // return;
         throw new Error(`Failed to fetch product with ID ${id}`);
       }
       if (response.status === 200) {
@@ -84,6 +83,8 @@ const ProductProvider = ({ children }: PropsWithChildren) => {
             description: product.description,
             images: product.images,
             default_price: product.default_price,
+            unit_amount: product.unit_amount,
+            quantity: product.quantity,
           };
         });
 
@@ -101,9 +102,6 @@ const ProductProvider = ({ children }: PropsWithChildren) => {
       });
 
       if (!prices.ok) {
-        // console.log(`Failed to fetch product with ID ${id}`);
-        // VILL JAG THROW NEW ERROR FÖR ATT HA MER FELAHNTERING HÄR???
-        // return;
         throw new Error(`Failed to fetch products`);
       }
       if (prices.status === 200) {
@@ -115,7 +113,7 @@ const ProductProvider = ({ children }: PropsWithChildren) => {
             currency: price.currency,
           };
         });
-        console.log(data);
+
         setPrices(pricesFromStripe);
       }
     } catch (error) {
