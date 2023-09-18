@@ -11,17 +11,7 @@ export default function Cart() {
       console.log(cart);
       const line_items = cart.map((cartItem) => ({
         price_data: cartItem.default_price,
-        quantity: 1,
-
-        // price_data: {
-        //   currency: "sek",
-        //   product_data: {
-        //     name: cartItem.price_data.product_data.name,
-        //     description: cartItem.price_data.product_data.description,
-        //   },
-        //   unit_amount: cartItem.price_data.unit_amount,
-        // },
-        // quantity: 1,
+        quantity: cartItem.quantity,
       }));
 
       const response = await fetch(
