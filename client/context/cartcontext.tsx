@@ -9,6 +9,8 @@ export interface IProduct {
   images: string;
 }
 export interface ICartItem {
+  images: string | undefined;
+  name: string | undefined;
   id: string;
   quantity: number;
   default_price: string;
@@ -53,6 +55,8 @@ const CartProvider = ({ children }: PropsWithChildren) => {
         id: product.id,
         quantity: 1,
         default_price: product.default_price,
+        images: product.images,
+        name: product.name,
       });
     }
 
