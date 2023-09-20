@@ -5,12 +5,9 @@ interface IUserContext {
   username: string;
   password: string;
   email: string;
-  // userId: string;
-  //   setUserId: React.Dispatch<React.SetStateAction<string>>;
   setUsername: React.Dispatch<React.SetStateAction<string>>;
   setPassword: React.Dispatch<React.SetStateAction<string>>;
   setEmail: React.Dispatch<React.SetStateAction<string>>;
-
   login: () => void;
   register: () => void;
 }
@@ -20,15 +17,10 @@ const defaultValues = {
   username: "",
   password: "",
   email: "",
-  // setUserId: () => {},
   setUsername: () => {},
   setPassword: () => {},
   setEmail: () => {},
   register: () => {},
-
-  // userId: "",
-
-  // setUserId: () => {},
   login: () => {},
 };
 
@@ -36,13 +28,14 @@ const UserContext = createContext<IUserContext>(defaultValues);
 // eslint-disable-next-line react-refresh/only-export-components
 export const useUserContext = () => useContext(UserContext);
 const UserProvider = ({ children }: PropsWithChildren) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  // const [isRegister, setIsRegister] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    const authToken = localStorage.getItem("authToken");
+    return authToken ? true : false;
+  });
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-
-  //   const [userId, setUserId] = useState("");
 
   const login = async () => {
     const userData = { username, password };
@@ -59,19 +52,17 @@ const UserProvider = ({ children }: PropsWithChildren) => {
       console.log("Detta gick inte att logga in du");
       return;
     }
-    // Stripe har en function som heter redirect men behövs egentligen inte.
+
     if (response.status === 200) {
       setIsLoggedIn(true);
-      const { url } = await response.json();
+      localStorage.setItem("isLoggedIn", "true");
+      const { url, user } = await response.json();
+
+      localStorage.setItem("user", user);
+
       window.location = url;
-      if (url) {
-        window.location = url;
-      } else {
-        console.error(
-          "Ingen giltig url, och gick inte att registrera dig tyvärr"
-        );
-      }
     } else {
+      setIsLoggedIn(false);
       console.log("Detta gick inte att logga in du");
     }
   };
@@ -88,10 +79,10 @@ const UserProvider = ({ children }: PropsWithChildren) => {
     });
     console.log("Server response:", response);
     if (!response.ok) {
-      console.log("Detta gick inte att logga in du");
+      console.log("Gick inte att registrera dig du...");
       return;
     }
-    // Stripe har en function som heter redirect men behövs egentligen inte.
+
     if (response.status === 200) {
       localStorage.setItem("isLoggedIn", "true");
       const { url } = await response.json();
@@ -104,22 +95,19 @@ const UserProvider = ({ children }: PropsWithChildren) => {
         );
       }
     } else {
-      console.log("Detta gick inte att logga in du");
+      console.log("Detta gick inte att registera dig...");
     }
   };
 
   return (
     <UserContext.Provider
       value={{
-        // isLoggedIn: false, // Du kan sätta detta här om det är alltid false vid start
         username,
         setUsername,
         password,
         setPassword,
         email,
         setEmail,
-        // userId,
-        // setUserId,
         register,
         login,
         isLoggedIn,

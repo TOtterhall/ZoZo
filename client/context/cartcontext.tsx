@@ -40,10 +40,8 @@ const CartProvider = ({ children }: PropsWithChildren) => {
   const [cart, setCart] = useState<ICartItem[]>([]);
 
   const addToCart = (product: IProduct) => {
-    // Kopiera den nuvarande cart
     const updatedCart = [...cart];
 
-    // Kolla om produkten redan finns i cart
     const existingItemIndex = updatedCart.findIndex(
       (item) => item.id === product.id
     );
@@ -78,7 +76,7 @@ const CartProvider = ({ children }: PropsWithChildren) => {
       console.log("Detta gick inte att logga in du");
       return;
     }
-    // Stripe har en function som heter redirect men behövs egentligen inte.
+
     if (response.status === 200) {
       const { url } = await response.json();
       window.location = url;
@@ -89,8 +87,6 @@ const CartProvider = ({ children }: PropsWithChildren) => {
           "Ingen giltig url, och gick inte att lägga en order tyvärr"
         );
       }
-    } else {
-      console.log("Detta gick inte att logga in du");
     }
   };
 
