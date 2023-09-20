@@ -3,7 +3,7 @@ import { Button } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
-// import { useCart } from "../../../context/cartcontext";
+
 import "./Product.css";
 import { useEffect } from "react";
 import { useCartContext } from "../../../context/cartcontext";
@@ -47,6 +47,7 @@ export default function Products() {
                 <Card.Title>{product.name}</Card.Title>
 
                 {getProductPrice(product)}
+
                 <Card.Text>{product.description}</Card.Text>
 
                 <Button
