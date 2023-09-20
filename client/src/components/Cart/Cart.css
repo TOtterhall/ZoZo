@@ -1,0 +1,13 @@
+.itemBody {
+  background-color: rgb(241, 241, 241);
+  margin: 10px;
+  width: 25%;
+  box-sizing: border-box;
+}
+.itemCards {
+  width: 60rem;
+  flex-direction: row;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

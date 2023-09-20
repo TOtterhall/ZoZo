@@ -1,14 +1,17 @@
 import { useCartContext } from "../../../context/cartcontext";
-import { useUserContext } from "../../../context/usercontext";
+import Card from "react-bootstrap/Card";
+import Col from "react-bootstrap/Col";
+import Container from "react-bootstrap/Container";
+import Button from "react-bootstrap/Button";
+import Login from "../Login/Login";
 
 export default function Cart() {
   const { cart } = useCartContext();
 
-  const { isLoggedIn } = useUserContext();
-
   async function handlePayment() {
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
     if (isLoggedIn) {
-      // Kontrollera om användaren är inloggad
+      console.log(isLoggedIn);
       console.log("Du har klickat på gå till betalning");
       try {
         console.log(cart);
@@ -29,46 +32,43 @@ export default function Cart() {
         );
         console.log(line_items);
         if (!response.ok) {
-          // Hantera fel om det behövs
           console.error("Något gick fel vid skapandet av sessionen.");
           return;
         }
-
-        const { url } = await response.json();
+        const { url, sessionId } = await response.json();
+        localStorage.setItem("session-id", sessionId);
         window.location = url;
       } catch (error) {
         console.log("error i cart");
-        // Hantera eventuella fel här
         alert("Det gick inte att slutföra betalningen.");
       }
     } else {
-      // Användaren är inte inloggad, visa ett meddelande eller navigera till inloggningssidan
       alert("Du måste logga in för att kunna lägga en beställning");
       console.log("Du måste vara inloggad för att gå till betalning.");
-      // Du kan här navigera användaren till inloggningssidan eller visa ett meddelande om inloggning.
     }
     console.log("Klickat på GÅ till kassan");
   }
 
   return (
-    <div>
-      <div>
-        <h2>Varukorg</h2>
+    <Container>
+      <h2>Varukorg</h2>
+      <Col md={2}>
         {cart.length === 0 ? (
           <p>Din varukorg är tom.</p>
         ) : (
-          <div>
+          <Card className="itemCards">
             {cart.map((cartItem) => (
-              <div key={cartItem.id}>
-                <img src={cartItem.images} alt={cartItem.name} />
-                <p>Produkt: {cartItem.name}</p>
-                <p>Antal: {cartItem.quantity}</p>
-              </div>
+              <Card.Body key={cartItem.id} className="itemBody">
+                <Card.Img src={cartItem.images} alt={cartItem.name} />
+                <Card.Title>Produkt: {cartItem.name}</Card.Title>
+                <Card.Text>Antal: {cartItem.quantity}</Card.Text>
+              </Card.Body>
             ))}
-            <button onClick={handlePayment}>GÅ TILL KASSAN</button>
-          </div>
+          </Card>
         )}
-      </div>
-    </div>
+        <Button onClick={handlePayment}>GÅ TILL KASSAN</Button>
+      </Col>
+      <Login />
+    </Container>
   );
 }
