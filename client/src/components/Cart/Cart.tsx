@@ -4,6 +4,7 @@ import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
 import Login from "../Login/Login";
+import Navbar from "../Navbar/Navbar";
 
 export default function Cart() {
   const { cart } = useCartContext();
@@ -50,25 +51,28 @@ export default function Cart() {
   }
 
   return (
-    <Container>
-      <h2>Varukorg</h2>
-      <Col md={2}>
-        {cart.length === 0 ? (
-          <p>Din varukorg är tom.</p>
-        ) : (
-          <Card className="itemCards">
-            {cart.map((cartItem) => (
-              <Card.Body key={cartItem.id} className="itemBody">
-                <Card.Img src={cartItem.images} alt={cartItem.name} />
-                <Card.Title>Produkt: {cartItem.name}</Card.Title>
-                <Card.Text>Antal: {cartItem.quantity}</Card.Text>
-              </Card.Body>
-            ))}
-          </Card>
-        )}
-        <Button onClick={handlePayment}>GÅ TILL KASSAN</Button>
-      </Col>
-      <Login />
-    </Container>
+    <>
+      <Navbar />
+      <Container>
+        <h2>Varukorg</h2>
+        <Col md={2}>
+          {cart.length === 0 ? (
+            <p>Din varukorg är tom.</p>
+          ) : (
+            <Card className="itemCards">
+              {cart.map((cartItem) => (
+                <Card.Body key={cartItem.id} className="itemBody">
+                  <Card.Img src={cartItem.images} alt={cartItem.name} />
+                  <Card.Title>Produkt: {cartItem.name}</Card.Title>
+                  <Card.Text>Antal: {cartItem.quantity}</Card.Text>
+                </Card.Body>
+              ))}
+            </Card>
+          )}
+          <Button onClick={handlePayment}>GÅ TILL KASSAN</Button>
+        </Col>
+        <Login />
+      </Container>
+    </>
   );
 }
