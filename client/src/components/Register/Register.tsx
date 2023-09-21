@@ -21,7 +21,6 @@ export default function Register() {
     await register();
     console.log("Nu är du registrerad");
     setIsRegistered(true);
-    // localStorage.setItem("isLoggedIn", "true");
   };
 
   return (
@@ -32,22 +31,23 @@ export default function Register() {
         ) : (
           <div>
             <input
-              type="text"
+              type="new-user-name"
               placeholder="Användarnamn"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
             <input
-              type="text"
+              type="new-epost"
               placeholder="E-post"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
             <input
-              type="text"
+              type="new-password"
               placeholder="Lösenord"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              autoComplete="new-password"
             />
             <button onClick={handleRegister}>REGISTRERA</button>
           </div>
