@@ -1,16 +1,23 @@
 import { Link } from "react-router-dom";
 import { useUserContext } from "../../../context/usercontext";
 
+//BOOTSTRAP
+// import Container from "react-bootstrap/Container";
+
+// import Form from "react-bootstrap/Form";
+
 export default function Login() {
   const { username, setUsername, password, setPassword, login, isLoggedIn } =
     useUserContext();
-
   const handleLogin = async () => {
     if (username && password) {
       login();
-      console.log("Du e inloggad din rakkare...");
-    } else {
-      alert("Du måste registrera dig förs");
+      if (!login) {
+        alert("Fel användarnamn eller lösenord");
+      } else {
+        console.log("Du är inloggad.");
+        console.log(username);
+      }
     }
   };
 
@@ -20,15 +27,15 @@ export default function Login() {
         {isLoggedIn ? (
           <Link to="/" className="loggInBtn"></Link>
         ) : (
-          <div>
+          <form>
             <input
-              type="text"
+              type="username"
               placeholder="Användarnamn"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
             <input
-              type="text"
+              type="password"
               placeholder="Lösenord"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -38,7 +45,10 @@ export default function Login() {
             <Link to="/register" className="loggInBtn">
               REGISTRERA
             </Link>
-          </div>
+            <Link to="/" className="loggInBtn">
+              Tillbaka till shoppen...
+            </Link>
+          </form>
         )}
       </div>
     </div>

@@ -38,13 +38,13 @@ const UserProvider = ({ children }: PropsWithChildren) => {
   const [email, setEmail] = useState("");
 
   const login = async () => {
-    const userData = { username, password };
+    const user = { username, password };
     const response = await fetch("http://localhost:3040/users/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(userData),
+      body: JSON.stringify(user),
     });
 
     console.log("Server response:", response);
@@ -77,9 +77,11 @@ const UserProvider = ({ children }: PropsWithChildren) => {
       },
       body: JSON.stringify(userData),
     });
+
     console.log("Server response:", response);
     if (!response.ok) {
       console.log("Gick inte att registrera dig du...");
+
       return;
     }
 
