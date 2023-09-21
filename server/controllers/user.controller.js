@@ -13,7 +13,8 @@ const CLIENT_URL = "http://localhost:5173";
 //Här vill jag att användaren ska hamna någonannanstans såklart. Enabrt för test.
 
 const userLoggedIn = `${CLIENT_URL}`;
-const userRegister = `${CLIENT_URL}/login`;
+const userRegister = `${CLIENT_URL}`;
+
 //USER REGISTER
 async function register(req, res) {
   const { username, password, email, stripeCustomerId } = req.body;
@@ -64,42 +65,57 @@ async function register(req, res) {
       // NYA LISTAN
       fs.writeFileSync("db/users.json", JSON.stringify(users));
       res.status(200).json({ url: userRegister });
-      // return res.status(200).json({ message: "Användaren har registrerats." });
-      // res.status(200).json("YAAA DU LYCKADES REGISTREA DIG");
+      // return res.cookie("isLoggedIn", "true", {
+      //   secure: true,
+      //   httpOnly: true,
+      // });
     }
   } catch (error) {
-    res.status(500).json({ error: "Server error" });
+    return res.status(500).json({ error: "Server error" });
   }
 }
 
 async function login(req, res) {
   const { username, password } = req.body;
-
+  const isLoggedIn = req.session.user ? req.session.user.isLoggedIn : false;
+  console.log("Is logged in:", isLoggedIn);
   try {
     const userData = fs.readFileSync("db/users.json", "utf-8");
     const users = JSON.parse(userData);
     console.log("Received username:", username);
     console.log("Received password:", password);
     const user = users.find((u) => u.username === username);
-    console.log("Found user:", user);
+
     if (!user) {
       return res.status(401).json("Wrong username or password");
     }
-
+    console.log("Hittade ingen sådan användare:", user);
     const passwordIsValid = await bcrypt.compare(password, user.password);
 
     if (!passwordIsValid) {
       return res.status(401).json("Wrong username or password");
     }
+    //LAGT TILL DESSA 2 BEHÖVS DET?
+    // Hämta användarens Stripe Customer ID från användardata
+    const stripeCustomerId = user.stripeCustomerId;
 
-    delete user.password;
-    req.session = user;
+    // Kontrollera om användaren är en giltig Stripe Customer
+    const stripeCustomer = await stripe.customers.retrieve(stripeCustomerId);
 
-    if (req.session._id) {
-      console.log(req.session._id);
+    if (!stripeCustomer) {
+      return res.status(401).json("Invalid Stripe Customer");
     }
+    delete user.password;
+    req.session.user = { ...user, isLoggedIn: true };
+    console.log(req.session.user);
+    // if (req.session._id) {
+    //   console.log(req.session._id);
+    // }
 
-    res.status(200).json({ url: userLoggedIn });
+    res.cookie("isLoggedIn", "true", { secure: true, httpOnly: true });
+    res.status(200).json({ url: userLoggedIn, user: username });
+    const isLoggedIn = req.session.user ? req.session.user.isLoggedIn : false;
+    console.log("Is logged in:", isLoggedIn);
   } catch (error) {
     res.status(500).json({ error: "Server error" });
   }
