@@ -1,11 +1,32 @@
 //Skapa en admin användare här
-POST http://localhost:3400/users/login
+POST http://localhost:3040/users/register
 Content-Type: application/json
 
 {
-  "username": "kalle",
+  "username": "Apa",
   "email":"test@",
-  "password": "4444"
+  "password": "44544",
+  "stripe_id": "STRIPE_ANVÄNDARES_ID"
 
 }
+###
+POST http://localhost:3040/users/login
+Content-Type: application/json
+
+{
+  "username": "Apa",
+ 
+  "password": "44544"
+
+}
+###
+GET http://localhost:3040/products
+###
+GET http://localhost:3040/products/prod_OchmUig9Poh2FF
+
+###
+GET http://localhost:3040/orders/Apa
+###
+GET http://localhost:3040/products/prices
+###
 
