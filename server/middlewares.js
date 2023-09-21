@@ -13,6 +13,7 @@ const initApp = () => {
   app.use(
     cors({
       origin: "*",
+      credentials: true,
     })
   );
 
