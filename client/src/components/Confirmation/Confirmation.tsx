@@ -17,7 +17,6 @@ export default function Confirmation() {
       if (verified) {
         setIsPaymentVerified(true);
         localStorage.removeItem("session-id");
-        //Spara till en lista...?
       } else {
         setIsPaymentVerified(false);
       }
