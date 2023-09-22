@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Navbar from "../Navbar/Navbar";
 
 export default function Confirmation() {
   const [isPaymentVerified, setIsPaymentVerified] = useState(false); // Initiera tillståndet som false
@@ -29,9 +30,15 @@ export default function Confirmation() {
     verifyPayment();
   }, []);
 
-  return isPaymentVerified ? (
-    <div>Tack för ditt köp!</div>
-  ) : (
-    <div>Något gick fel med betalningen...</div>
+  return (
+    <>
+      <Navbar />
+      {isPaymentVerified ? (
+        <div>Tack för ditt köp!</div>
+      ) : (
+        <div>Något gick fel med betalningen...</div>
+      )}
+      ;
+    </>
   );
 }
