@@ -4,13 +4,12 @@ import { useUserContext } from "../../../context/usercontext";
 export default function Login() {
   const { username, setUsername, password, setPassword, login, isLoggedIn } =
     useUserContext();
+
   const handleLogin = async () => {
     if (username && password) {
       login();
-
-      if (!login) {
-        alert("Du måste registrera dig först");
-      }
+    } else {
+      alert("Du måste registrera dig förs");
     }
   };
 
@@ -20,15 +19,15 @@ export default function Login() {
         {isLoggedIn ? (
           <Link to="/" className="loggInBtn"></Link>
         ) : (
-          <form>
+          <div>
             <input
-              type="username"
+              type="text"
               placeholder="Användarnamn"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
             <input
-              type="password"
+              type="text"
               placeholder="Lösenord"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -38,10 +37,7 @@ export default function Login() {
             <Link to="/register" className="loggInBtn">
               REGISTRERA
             </Link>
-            <Link to="/" className="loggInBtn">
-              Tillbaka till shoppen...
-            </Link>
-          </form>
+          </div>
         )}
       </div>
     </div>
