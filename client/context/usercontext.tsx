@@ -49,13 +49,13 @@ const UserProvider = ({ children }: PropsWithChildren) => {
 
     console.log("Server response:", response);
     if (!response.ok) {
-      console.log("Detta gick inte att logga in du");
       return;
     }
 
     if (response.status === 200) {
       setIsLoggedIn(true);
       localStorage.setItem("isLoggedIn", "true");
+
       const { url, user } = await response.json();
 
       localStorage.setItem("user", user);
@@ -63,7 +63,6 @@ const UserProvider = ({ children }: PropsWithChildren) => {
       window.location = url;
     } else {
       setIsLoggedIn(false);
-      console.log("Detta gick inte att logga in du");
     }
   };
 
@@ -78,10 +77,7 @@ const UserProvider = ({ children }: PropsWithChildren) => {
       body: JSON.stringify(userData),
     });
 
-    console.log("Server response:", response);
     if (!response.ok) {
-      console.log("Gick inte att registrera dig du...");
-
       return;
     }
 
@@ -96,8 +92,6 @@ const UserProvider = ({ children }: PropsWithChildren) => {
           "Ingen giltig url, och gick inte att registrera dig tyvärr"
         );
       }
-    } else {
-      console.log("Detta gick inte att registera dig...");
     }
   };
 
