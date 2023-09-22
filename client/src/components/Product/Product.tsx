@@ -35,13 +35,6 @@ export default function Products() {
     await getSpecificProduct(product.id);
 
     addToCart(product);
-    const existingCart = localStorage.getItem("cart");
-
-    const cart = existingCart ? JSON.parse(existingCart) : [];
-
-    cart.push(product);
-
-    localStorage.setItem("cart", JSON.stringify(cart));
   };
 
   return (
