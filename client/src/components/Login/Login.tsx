@@ -1,22 +1,15 @@
 import { Link } from "react-router-dom";
 import { useUserContext } from "../../../context/usercontext";
 
-//BOOTSTRAP
-// import Container from "react-bootstrap/Container";
-
-// import Form from "react-bootstrap/Form";
-
 export default function Login() {
   const { username, setUsername, password, setPassword, login, isLoggedIn } =
     useUserContext();
   const handleLogin = async () => {
     if (username && password) {
       login();
+
       if (!login) {
-        alert("Fel användarnamn eller lösenord");
-      } else {
-        console.log("Du är inloggad.");
-        console.log(username);
+        alert("Du måste registrera dig först");
       }
     }
   };
