@@ -30,10 +30,18 @@ export default function Products() {
       return <div>Pris saknas</div>;
     }
   };
+
   const handleAddToCart = async (product: IProduct) => {
     await getSpecificProduct(product.id);
     console.log(`Din vara med ${product.id} ligger nu i varukorgen`);
     addToCart(product);
+    const existingCart = localStorage.getItem("cart");
+
+    const cart = existingCart ? JSON.parse(existingCart) : [];
+
+    cart.push(product);
+
+    localStorage.setItem("cart", JSON.stringify(cart));
   };
 
   return (
