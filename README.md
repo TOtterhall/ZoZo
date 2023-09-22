@@ -1,9 +1,13 @@
-# ZoZO-shop
+# ZoZo-shop
 
 Webbshop med integration mot stripe
 Inlämningsuppgift i kursen "Systemstöd och intergration med 3:e parts system".
 Backend: Node.js/Express
 Frontend:React/Typescript
+
+## Länk till repot
+
+https://github.com/TOtterhall/ZoZo.git
 
 ## Installation
 
