@@ -12,10 +12,7 @@ export default function Cart() {
   async function handlePayment() {
     const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
     if (isLoggedIn) {
-      console.log(isLoggedIn);
-      console.log("Du har klickat på gå till betalning");
       try {
-        console.log(cart);
         const line_items = cart.map((cartItem) => ({
           price_data: cartItem.default_price,
           quantity: cartItem.quantity,
@@ -31,7 +28,7 @@ export default function Cart() {
             body: JSON.stringify({ line_items }),
           }
         );
-        console.log(line_items);
+
         if (!response.ok) {
           console.error("Något gick fel vid skapandet av sessionen.");
           return;
@@ -40,14 +37,11 @@ export default function Cart() {
         localStorage.setItem("session-id", sessionId);
         window.location = url;
       } catch (error) {
-        console.log("error i cart");
         alert("Det gick inte att slutföra betalningen.");
       }
     } else {
       alert("Du måste logga in för att kunna lägga en beställning");
-      console.log("Du måste vara inloggad för att gå till betalning.");
     }
-    console.log("Klickat på GÅ till kassan");
   }
 
   return (

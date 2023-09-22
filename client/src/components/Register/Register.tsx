@@ -19,7 +19,7 @@ export default function Register() {
 
   const handleRegister = async () => {
     await register();
-    console.log("Nu är du registrerad");
+
     setIsRegistered(true);
   };
 
