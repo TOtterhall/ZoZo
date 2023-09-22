@@ -52,7 +52,7 @@ const ProductProvider = ({ children }: PropsWithChildren) => {
       const response = await fetch(`http://localhost:3040/products/${id}`, {
         method: "GET",
       });
-      console.log("Server response:", response);
+
       if (!response.ok) {
         throw new Error(`Failed to fetch product with ID ${id}`);
       }

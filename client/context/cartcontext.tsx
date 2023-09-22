@@ -71,9 +71,7 @@ const CartProvider = ({ children }: PropsWithChildren) => {
       body: JSON.stringify(cart),
     });
 
-    console.log("Server response:", response);
     if (!response.ok) {
-      console.log("Detta gick inte att logga in du");
       return;
     }
 

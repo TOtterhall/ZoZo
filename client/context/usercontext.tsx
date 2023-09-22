@@ -47,7 +47,6 @@ const UserProvider = ({ children }: PropsWithChildren) => {
       body: JSON.stringify(user),
     });
 
-    console.log("Server response:", response);
     if (!response.ok) {
       return;
     }
@@ -68,7 +67,7 @@ const UserProvider = ({ children }: PropsWithChildren) => {
 
   const register = async () => {
     const userData = { username, password, email };
-    console.log("Users before update:", userData);
+
     const response = await fetch("http://localhost:3040/users/register", {
       method: "POST",
       headers: {
